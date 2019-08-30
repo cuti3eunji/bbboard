@@ -11,4 +11,5 @@
 
 <!-- Custom styles for this template -->
 <link href="${cp}/css/dashboard.css" rel="stylesheet">
-<link href="${cp}/css/blog.css" rel="stylesheet"> 
+<link href="${cp}/css/blog.css" rel="stylesheet">
+<link href="${cp}/css/common.css" rel="stylesheet">

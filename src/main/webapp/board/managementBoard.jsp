@@ -17,7 +17,11 @@
 <title>Jsp-Main</title>
 
 <%@include file="/commonJsp/basicLib.jsp"%>
-
+<style>
+ .center-align{
+ 	text-align: center;
+ }
+</style>
 <script>
 $(document).ready(function () {
 	

@@ -22,13 +22,19 @@
 	}
 	
 	.postTr:hover {
-		background: #FFCA6C;
 		cursor: pointer;
 	}
 	.table th{
 		text-align: center;
 	}
+	.table tr .center-align{
+		text-align: center;
+	}
 	
+	.disabled{
+		color : lightgray;
+		cursor: not-allowed;
+	}
 	
 </style>
 <script>
@@ -42,11 +48,14 @@
 			
 			// input 태그에 값 설정
 			$("#postNo").val(data);
-			
 			// form 태그 이용하여 전송
 			console.log("serialize: " + $("#frm").serialize());
 			
 			$("#frm").submit();
+		});
+		
+		$("#writePostBtn").on("click",function(){
+						
 		});
 		
 	});
@@ -55,8 +64,9 @@
 
 <body>
 	<!-- 개발자 입장에서 데이터를 전송하기 위하여 사용하는 form -->
-	<form id="frm" action="${cp }/postDetail" method="post">
+	<form id="frm" action="${cp }/postDetail" method="get">
 		<input type="hidden" id="postNo" name="postNo"/>
+		<input type="hidden" id="boardNm" name="boardNm" value="${boardNm }"/>
 	</form>
 	<!-- header -->
 	<%@ include file="/commonJsp/header.jsp" %>
@@ -72,7 +82,7 @@
 
 				<div class="row">
 					<div class="col-sm-8 blog-main">
-						<h2 class="sub-header">${boardNm }ttt</h2>
+						<h2 class="sub-header">${boardNm }</h2>
 						<div class="table-responsive">
 							<table class="table">
 								<tr>
@@ -83,25 +93,48 @@
 								</tr>
 								
 								<c:forEach items="${postList}" var="post">
-									<tr class="postTr" data-postNo="${post.postNo }">
-										<td>${post.postNo}</td>
-										<td>
-											<c:forEach begin="0" end="${(post.level-1)*2 }" var="i">
-												&nbsp;
-											</c:forEach>
-											<c:if test="${(post.level-1)*2 != 0 }">
-												┖
-											</c:if>
-										${post.postTitle}</td>
-										<td>${post.userId}</td>
-										<td>${post.postdate_fmt}</td>
-									</tr>
+											<c:choose> 
+												<c:when test="${post.postStatus == 1 }">
+													<tr class="postTr" data-postNo="${post.postNo }">
+														<td class="center-align">${post.postNo}</td>
+														<td>
+															<c:forEach begin="0" end="${(post.level-1)*2 }" var="i">
+																&nbsp;
+															</c:forEach>
+															
+															<c:if test="${(post.level-1)*2 != 0 }">
+															┖
+															</c:if>
+															${post.postTitle}
+														</td>
+														<td class="center-align">${post.userId}</td>
+														<td class="center-align">${post.postdate_fmt}</td>
+													</tr>
+												</c:when>
+												<c:otherwise>
+													<tr class="disabled" data-postNo="${post.postNo }">
+														<td class="center-align">${post.postNo}</td>
+														<td>
+															<c:forEach begin="0" end="${(post.level-1)*2 }" var="i">
+																&nbsp;
+															</c:forEach>
+															
+															<c:if test="${(post.level-1)*2 != 0 }">
+															┖
+															</c:if>
+															삭제된 게시글 입니다.
+														</td>
+														<td class="center-align">${post.userId}</td>
+														<td class="center-align">${post.postdate_fmt}</td>
+													</tr>
+												</c:otherwise>
+											</c:choose>
+
 								</c:forEach>
-								
 							</table>
 						</div>
 
-						<a class="btn btn-default pull-right" id="writePostBtn">새글 등록</a>
+						<a class="btn btn-default pull-right" id="writePostBtn" href="${cp }/writePost">새글 등록</a>
 
 						<div class="text-center">
 							<ul class="pagination">

@@ -58,8 +58,6 @@ public class PostListController extends HttpServlet {
 		request.setAttribute("paginationSize", paginationSize);
 		request.setAttribute("page", page);
 		
-		logger.debug("  {}",request.getParameter("boardNm"));
-		
 		request.getRequestDispatcher("post/postList.jsp").forward(request, response);
 	}
 

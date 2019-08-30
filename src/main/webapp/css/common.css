@@ -1,0 +1,57 @@
+@charset "UTF-8";
+@font-face {
+	font-family: 'BBTreeGR';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_nine_@1.1/BBTreeGR.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+.notosanskr * {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+body {
+	padding-top: 70px;
+	padding-bottom: 30px;
+	font-family: 'Noto Sans KR';
+}
+
+.board_title {
+	font-weight : 700;
+	font-size : 22pt;
+	margin : 10pt;
+}
+
+.board_info_box {
+	color : #6B6B6B;
+	margin : 10pt;
+}
+
+.board_author {
+	font-size : 10pt;
+	margin-right : 10pt;
+}
+
+.board_date {
+	font-size : 10pt;
+}
+
+.board_content {
+	color : #444343;
+	font-size : 12pt;
+	margin : 10pt;
+}
+
+.board_tag {
+	font-size : 11pt;
+	margin : 10pt;
+	padding-bottom : 10pt;
+}
+
+
+
+

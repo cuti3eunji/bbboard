@@ -1,8 +1,6 @@
 package kr.or.ddit.post.web;
 
 import java.io.IOException;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -13,51 +11,46 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kr.or.ddit.board.model.Board;
-import kr.or.ddit.post.model.AFile;
 import kr.or.ddit.post.model.Post;
 import kr.or.ddit.post.service.IPostService;
 import kr.or.ddit.post.service.PostService;
-import kr.or.ddit.util.BoardStatusList;
 
-@WebServlet("/postDetail")
+@WebServlet("/updatePost")
 @MultipartConfig()
-public class PostDetailpageController extends HttpServlet {
+public class PostUpdateController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(PostDetailpageController.class);
-
+	private static final Logger logger = LoggerFactory.getLogger(PostDeleteController.class);
+       
 	private IPostService postService;
-
+	
 	@Override
 	public void init() throws ServletException {
 		postService = new PostService();
 	}
-    
 	
-	//일반 조회 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		int postNo = Integer.parseInt(request.getParameter("postNo"));
-		String boardNm = request.getParameter("boardNm");
 		
-		List<Board> stBoardList = BoardStatusList.stBoardList();
-		Post postdt = postService.getPostDetail(postNo);
-		List<AFile> afileList = postService.getAttachedFile(postNo);
+		Post post = postService.getPostDetail(postNo);
 		
-		request.setAttribute("stBoardList", stBoardList);
-		request.setAttribute("postdt", postdt);
-		request.setAttribute("afile", afileList);
-		request.setAttribute("boardNm", boardNm);
+		int updateCnt = 0;
 		
+		updateCnt = postService.updatePost(post);
+		if(updateCnt == 1) {
+			//성공
+			response.sendRedirect(request.getContextPath() + "/postDetail");
+		}else {
+			request.getRequestDispatcher("/main.jsp").forward(request, response);
+		}
 		
-		request.getRequestDispatcher("/post/postDetail.jsp").forward(request, response);
 	}
-	
-	//글작성 후 보여지는 화면
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.setCharacterEncoding("utf-8");
-		
-		
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

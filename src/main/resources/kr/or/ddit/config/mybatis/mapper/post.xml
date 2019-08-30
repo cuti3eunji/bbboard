@@ -69,6 +69,14 @@
 		where postNo = #{postNo}
 	</update>
 	
+	<!-- 게시글 수정 첨부파일 -->
+	<update id="updateFile" parameterType="afile">
+		update zzz_file set
+			filename = #{filename},
+			realfilename = #{realfilename}
+		where postNo = #{postNo}
+	</update>
+	
 	
 	<!-- 게시글 삭제 ==> 삭제여부 바꾸기  -->
 	<update id="deletePost" parameterType="int">

@@ -35,14 +35,9 @@
 
 
 				<div class="row">
-					<div class="col-sm-8 blog-main">
+					<div class="col-sm-12 blog-main">
 						<h2 class="sub-header">${boardNm }</h2>
-						<article>
-
 							<div class="container" role="main">
-
-								<h2>board Content</h2>
-
 								<div class="bg-white rounded shadow-sm">
 
 									<div class="board_title">
@@ -50,65 +45,56 @@
 									</div>
 
 									<div class="board_info_box">
-
-										<span class="board_author"><c:out
-												value="${postdt.postNo}" />,</span><span class="board_date"><c:out
-												value="${postdt.postdate_fmt}" /></span>
-
+										
+										<span class="board_date">
+											<c:out value="${postdt.postdate_fmt}" />
+										</span>
+										
+										<span class="board_author">
+											<c:out value="${postdt.userId}" />
+										</span>
 									</div>
-
+									
 									<div class="board_content">${postdt.postContent}</div>
-									
 									<c:choose>
-									
-										<c:when test="${fn:length(afile) > 0}">
+										<c:when test="${empty afile }">
 											<div class="board_tag">
-												첨부파일 :
-												<c:out value="${afile.filename}" />
+												<c:out value="첨부파일이 없습니다." />
+												<div class="text-right">
+													<a href="${cp }/updatePost?postNo=${postdt.postNo}" class="btn btn-primary btn-sm">수정</a>
+													<a href="${cp }/deletePost?postNo=${postdt.postNo}" class="btn btn-primary btn-sm">삭제</a>
+													<a href="${cp }/insertPost" class="btn btn-primary btn-sm">답글</a>
+												</div>
 											</div>
 										</c:when>
-										
+
 										<c:otherwise>
 											<div class="board_tag">
 												첨부파일 :
-												<c:out value="첨부파일이 없습니다." />
+												<c:forEach items="${afile }" var="afile">
+													<c:out value="${afile.filename}" />
+												</c:forEach>
+												<div class="text-right">
+													<a href="${cp }/updatePost" class="btn btn-primary btn-sm">수정</a>
+													<a href="${cp }/deletePost" class="btn btn-primary btn-sm">삭제</a>
+													<a href="${cp }/insertPost" class="btn btn-primary btn-sm">답글</a>
+												</div>
 											</div>
 										</c:otherwise>
-									
 									</c:choose>
-
 								</div>
-
-
-
-								<div style="margin-top: 20px">
-
-									<button type="button" class="btn btn-sm btn-primary"
-										id="btnUpdate">수정</button>
-
-									<button type="button" class="btn btn-sm btn-primary"
-										id="btnDelete">삭제</button>
-
-									<button type="button" class="btn btn-sm btn-primary"
-										id="btnList">목록</button>
-
-								</div>
-
 							</div>
-						</article>
 
-
-						<a class="btn btn-default pull-right">제품 등록</a>
-
-						<div class="text-center">
-							<ul class="pagination">
-								<li><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
-							</ul>
-						</div>
+						<!-- 댓글 창 -->
+						<hr>
+						<form class="form-inline" action="${cp }/insertCmt">
+							<div class="input-group col-sm-8">
+								<input id="msg" type="text" class="form-control" name="msg" placeholder="댓글을 남겨보세요">
+							</div>
+								<button type="submit" class="btn btn-default">
+									<icon class="glyphicon glyphicon-pencil">
+								</button>
+						</form>
 					</div>
 				</div>
 			</div>
