@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<!-- 전체  Board List를 가져오는 select -->
+	<select id="getAllBoardList" resultType="board">
+		select * from zzz_board order by boardNo
+	</select>
+	
+	<!-- 게시판의 사용여부에 따른 List -->
+	<select id="getBoardStatusList" parameterType="Integer" resultType="board">
+		select * from zzz_board where boardstatus = #{boardStatus} order by boardNo
+	</select>
+	
+	<!-- 게시판 생성 ===> boardNo는 시퀀스, boardDate는 현재날짜 -->
+	<insert id="insertBoard" parameterType="board">
+		insert into zzz_board (boardNo, boardNm, boardStatus, userId, boardDate)
+			values(zzzboard_seq.nextval, #{boardNm}, #{boardStatus}, #{userId}, sysdate)
+	</insert>
+	
+	<!-- 게시판 수정 -->
+	<update id="updateBoard" parameterType="board">
+		update zzz_board set
+		boardNm = #{boardNm},
+		boardStatus = #{boardStatus}
+		where boardNo = #{boardNo}
+	</update>
+	
+
+</mapper>

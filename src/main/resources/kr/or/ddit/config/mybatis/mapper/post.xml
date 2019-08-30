@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+	
+	<!-- 전체 게시글 리스트  -->
+	<select id="getPostList" resultType="post">
+		select * from zzz_post
+	</select>
+	
+	
+	<!-- 페이징처리 -->
+	<select id="getPostPagingList" resultType="post" parameterType="map">
+		select *
+		  from 
+			(select rownum rn, a.*
+		 	   from (select postNo, parent_postNo, postTitle, postDate, userId, level, postStatus
+  					   from (select *
+		 			   		   from zzz_post
+					  		  where boardNo = #{boardNo} order by postNo desc) a
+					  start with parent_postNo is null
+ 					  connect by prior postNo = parent_postNo
+					  order siblings by groupNo desc, postNO) a )
+			  where rn between (#{page}-1)*#{pagesize} + 1 and #{page}*#{pagesize}
+	</select>
+	
+	<select id="getPostTotalCnt" parameterType="Integer" resultType="Integer">
+		select count(*)
+		from zzz_post
+		where boardNo=#{boardNo}
+	</select>
+	
+	<!-- 게시글 상세 조회  -->
+	<select id="getPostDetail" parameterType="Integer" resultType="post">
+		select *
+		  from zzz_post
+		 where postNo = #{postNo}
+	</select>
+	
+	<!-- 게시글 상세 - 첨부파일 -->
+	<select id="getAttachedFile" parameterType="Integer" resultType="afile">
+		select *
+		  from zzz_file
+		 where postNo = #{postNo}
+	</select>
+	
+	<!-- 게시글 작성 // postNo시퀀스  -->
+	<insert id="insertPost" parameterType="post">
+		insert into zzz_post (postNo, boardNo, parent_postNo, postTitle, postContent, userId, postDate, postStatus, groupNo)
+			values(zzzpost_seq.nextval, #{boardNo}, 
+			
+			case when #{parent_postNo,jdbcType=NUMERIC} = 0 then null
+				 else #{parent_postNo,jdbcType=NUMERIC}
+			
+			#{postTitle}, #{postContent}, #{userId}, sysdate, 1,
+			
+			case when #{parent_postNo,jdbcType=NUMERIC} = 0 then zzzpost_seq.currval
+				 else #{parent_postNo,jdbcType=NUMERIC}
+			)
+	</insert>
+	
+	
+	<!-- 게시글 수정 -->
+	<update id="updatePost" parameterType="post">
+		update zzz_post set
+			postTitle = #{postTitle},
+			postContent = #{postContent}
+		where postNo = #{postNo}
+	</update>
+	
+	
+	<!-- 게시글 삭제 ==> 삭제여부 바꾸기  -->
+	<update id="deletePost" parameterType="int">
+		update zzz_post set
+			postStatus = 0
+		where postNo = #{postNo}
+	</update>
+	
+	
+</mapper>
