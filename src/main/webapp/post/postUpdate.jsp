@@ -54,12 +54,11 @@ $(document).ready(function() {
 	})
 	
 	//파일 갯수 제한
-	$('#picture').change(function(){
-		var filee = document.getElementById('picture').files;
-		
-		if(filee.length > 5){
+	$("#picture").change(function(){
+		console.log("length: " + this.files.length);
+		if(this.files.length > (5-$(".removefile").length)){
 			alert("파일은 최대 5개까지 업로드 가능합니다.");
-			$('#picture').val("");
+	         $(this).val("");
 		}
 	})
 	
@@ -77,7 +76,15 @@ function validation(){
 
 	return true;
 }
-</script>
+
+</script>
+
+<style>
+	a.removefile{
+		text-decoration : none;
+		color : black;
+	}
+</style>
 </head>
 
 <body>
@@ -95,53 +102,42 @@ function validation(){
 
 				<div class="row">
 					<div class="col-sm-8 blog-main">
-						<h2 class="sub-header">${boardNm }</h2>
-							<div class="container" role="main">
-							<c:choose>
-								<c:when test="${empty parentNo }">
-									<form action="${cp }/insertPost" method="post" id="frm" enctype="multipart/form-data">
-										<div class="form-group col-sm-10">
-											<div class="col-sm-10">
-												<input type="hidden" name="boardNo" value="${boardNo }">
-		  										<input type="text" class="form-control" id="usr" name="postTitle" placeholder="제목을 입력하세요">
-		  									</div>
-										</div>
-										<textarea name="smarteditor" id="smarteditor" rows="10" cols="100" style="width:766px; height:412px;"></textarea> 
-										<div class="form-inline">
-											<label>첨부파일 : </label>
-											<input type="file" class="form-control" id="picture" name="picture" multiple="multiple">
-										</div>
-										<div class="text-right">
-											<input type="submit" class="btn" id="savebutton" value="작성" />
-										</div>
-									</form>
-								</c:when>
+						<h2 class="sub-header">${boardNm } | 수정</h2>
+						
+						<div class="container" role="main">
+							<form action="${cp }/updatePost" method="post" id="frm" enctype="multipart/form-data">
+								<div class="form-group col-sm-10">
+									<div class="col-sm-10">
+										<input type="hidden" name="postNo" value="${postdt.postNo }">
+										<input type="hidden" name="boardNo" value="${postdt.boardNo }">
+	  									<input type="text" class="form-control" id="usr" name="postTitle" value="${postdt.postTitle }">
+	  								</div>
+								</div>
+								<textarea name="smarteditor" id="smarteditor" rows="10" cols="100" style="width:766px; height:412px;">${postdt.postContent }</textarea> 
+								<div class="form-inline">
+									
+									
+									<label>첨부파일 : </label>
+									
+									<ul class="list-unstyled">
+										<c:forEach items="${afList }" var="afile">
+											<li>
+												<a href="${cp }/delfile?fileNo=${afile.fileNo}" class="glyphicon glyphicon-remove removefile"></a>
+												${afile.filename }
+											</li>
+										</c:forEach>
+									</ul>
+									
+									<input type="file" class="form-control" id="picture" name="picture" multiple >
+								</div>
 								
-								<c:otherwise>
-									<form action="${cp }/insertPost" method="post" id="frm" enctype="multipart/form-data">
-										<div class="form-group col-sm-10">
-											<div class="col-sm-10">
-												<input type="hidden" name="parentNo" value="${parentNo }">
-												<input type="hidden" name="boardNo" value="${boardNo }">
-		  										<input type="text" class="form-control" id="usr" name="postTitle" placeholder="제목을 입력하세요">
-		  									</div>
-										</div>
-										<textarea name="smarteditor" id="smarteditor" rows="10" cols="100" style="width:766px; height:412px;"></textarea> 
-										<div class="form-inline">
-											<label>첨부파일 : </label>
-											<input type="file" class="form-control" id="picture" name="picture" multiple>
-										</div>
-										<div class="text-right">
-											<input type="submit" class="btn" id="savebutton" value="작성" />
-										</div>
-									</form>
-								</c:otherwise>
-							</c:choose>
-							
-							
-							
+								<div class="text-right">
+									<input type="submit" class="btn" id="savebutton" value="작성" />
+								</div>
+							</form>
+						</div>
+						
 					</div>
-				</div>
 				</div>
 			</div>
 		</div>

@@ -53,7 +53,7 @@ public class InsertBoardController extends HttpServlet {
 			
 			if (insertCnt == 1) {
 				// 서버 상의 상태가 바뀔때는 redirect를 사용한다. -중복방지
-				response.sendRedirect(request.getContextPath() + "/managementBoard");
+				response.sendRedirect(request.getContextPath() + "/managementBoard?");
 			}
 			// 실패 시 : 메인으로
 			else {

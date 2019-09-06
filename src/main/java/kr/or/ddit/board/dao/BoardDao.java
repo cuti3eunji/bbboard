@@ -64,4 +64,9 @@ public class BoardDao implements IBoardDao {
 		return sqlSession.update("board.updateBoard", board);
 	}
 
+	@Override
+	public Board getBoardInfo(SqlSession sqlSession, int boardNo) {
+		return sqlSession.selectOne("board.getBoardInfo", boardNo);
+	}
+
 }

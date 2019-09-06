@@ -18,10 +18,24 @@
 
 <title>Jsp-basicLib</title>
 <%@ include file="/commonJsp/basicLib.jsp"%>
+
+<style>
+	.disabled{
+		color : lightgray;
+		cursor: not-allowed;
+	}
+</style>
+
+<script>
+	$(function(){
+		$('.removeCmt').click(function(){
+			$('.removefrm').submit();
+		});
+	})
+</script>
 </head>
 
 <body>
-	
 	<!-- header -->
 	<%@ include file="/commonJsp/header.jsp" %>
 	
@@ -61,23 +75,41 @@
 											<div class="board_tag">
 												<c:out value="첨부파일이 없습니다." />
 												<div class="text-right">
-													<a href="${cp }/updatePost?postNo=${postdt.postNo}" class="btn btn-primary btn-sm">수정</a>
-													<a href="${cp }/deletePost?postNo=${postdt.postNo}" class="btn btn-primary btn-sm">삭제</a>
-													<a href="${cp }/insertPost" class="btn btn-primary btn-sm">답글</a>
+													<c:if test="${S_USERVO.userId == postdt.userId }">
+														<a href="${cp }/updatePost?postNo=${postdt.postNo}" id="updateBtn" class="btn btn-primary btn-sm">수정</a>
+														<a href="${cp }/deletePost?postNo=${postdt.postNo}" id="deleteBtn" class="btn btn-primary btn-sm">삭제</a>
+													</c:if>
+														<form action="${cp }/writePost" method="post" >
+															<input type="hidden" name="parentNo" value="${postdt.postNo }">
+															<input type="hidden" name="boardNm" value="${boardNm }">
+															<input type="hidden" name="boardNo" value="${boardNo }">
+															<button type="submit" class="btn btn-primary btn-sm">답글</button>
+														</form>
 												</div>
 											</div>
 										</c:when>
 
 										<c:otherwise>
 											<div class="board_tag">
-												첨부파일 :
-												<c:forEach items="${afile }" var="afile">
-													<c:out value="${afile.filename}" />
-												</c:forEach>
+												첨부파일 : 
+												<div class="">
+													<c:forEach items="${afile }" var="afile">
+														<a href="${cp }/fileDownload?fileNo=${afile.fileNo}" download="${afile.filename }">
+														<c:out value="${afile.filename}"/><br>
+														</a>
+													</c:forEach>
+												</div>
 												<div class="text-right">
-													<a href="${cp }/updatePost" class="btn btn-primary btn-sm">수정</a>
-													<a href="${cp }/deletePost" class="btn btn-primary btn-sm">삭제</a>
-													<a href="${cp }/insertPost" class="btn btn-primary btn-sm">답글</a>
+													<c:if test="${S_USERVO.userId == postdt.userId }">
+														<a href="${cp }/updatePost?postNo=${postdt.postNo}" id="updateBtn" class="btn btn-primary btn-sm">수정</a>
+														<a href="${cp }/deletePost?postNo=${postdt.postNo}" id="deleteBtn" class="btn btn-primary btn-sm">삭제</a>
+													</c:if>
+														<form action="${cp }/writePost" method="post">
+															<input type="hidden" name="parentNo" value="${postdt.postNo }">
+															<input type="hidden" name="boardNm" value="${boardNm }">
+															<input type="hidden" name="boardNo" value="${boardNo }">
+															<button type="submit" class="btn btn-primary btn-sm">답글</button>
+														</form>
 												</div>
 											</div>
 										</c:otherwise>
@@ -87,9 +119,29 @@
 
 						<!-- 댓글 창 -->
 						<hr>
-						<form class="form-inline" action="${cp }/insertCmt">
+						<ul class="list-unstyled">
+							<c:forEach items="${cmtList }" var="cmt">
+								<c:choose>
+									<c:when test="${cmt.commentStatus == 0 }">
+										<li class="disabled">삭제된 댓글입니다.</li>
+									</c:when>
+									
+									<c:otherwise>
+										<li>
+									 	<c:if test="${S_USERVO.userId == cmt.userId }">
+									 		<a href="${cp }/removeCmt?postNo=${postdt.postNo}&cmtNo=${cmt.commentNo}" class="glyphicon glyphicon-remove removeCmt"></a>
+										</c:if>
+										 ${cmt.commentContent}&nbsp;&nbsp;&nbsp;[ ${cmt.userId} / ${cmt.commentDate_fmt } ] 
+										</li>
+									</c:otherwise>
+								</c:choose>
+							
+							</c:forEach>
+						</ul>
+						<form class="form-inline" action="${cp }/insertCmt" method="get">
 							<div class="input-group col-sm-8">
-								<input id="msg" type="text" class="form-control" name="msg" placeholder="댓글을 남겨보세요">
+								<input type="hidden" name="postNo" value=${postdt.postNo }>
+								<input id="msg" type="text" class="form-control" name="commentContent" placeholder="댓글을 남겨보세요" maxlength="500">
 							</div>
 								<button type="submit" class="btn btn-default">
 									<icon class="glyphicon glyphicon-pencil">

@@ -1,6 +1,8 @@
 package kr.or.ddit.post.web;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -20,8 +22,6 @@ import kr.or.ddit.afile.model.AFile;
 import kr.or.ddit.afile.service.AfileService;
 import kr.or.ddit.afile.service.IAfileService;
 import kr.or.ddit.board.model.Board;
-import kr.or.ddit.board.service.BoardService;
-import kr.or.ddit.board.service.IBoardService;
 import kr.or.ddit.post.model.Post;
 import kr.or.ddit.post.service.IPostService;
 import kr.or.ddit.post.service.PostService;
@@ -29,54 +29,21 @@ import kr.or.ddit.user.model.User;
 import kr.or.ddit.util.BoardStatusList;
 import kr.or.ddit.util.FileuploadUtil;
 
-@WebServlet("/updatePost")
+@WebServlet("/insertPost")
 @MultipartConfig(maxFileSize = 1024*1024*5, maxRequestSize = 1024*1024*5*5)
-public class PostUpdateController extends HttpServlet {
+public class PostInsertController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(PostDeleteController.class);
-       
+	private static final Logger logger = LoggerFactory.getLogger(PostInsertController.class);
+	
 	private IPostService postService;
 	private IAfileService afileService;
-	private IBoardService boardService;
-	
+       
 	@Override
 	public void init() throws ServletException {
 		postService = new PostService();
 		afileService = new AfileService();
-		boardService = new BoardService();
 	}
 	
-	//수정으로 넘어가기위한 get 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Board> stBoardList = BoardStatusList.stBoardList();
-		
-		
-		String pstNo = request.getParameter("postNo");
-		int postNo = pstNo == null ? 0 : Integer.parseInt(pstNo);
-		
-		Post postdt = postService.getPostDetail(postNo);
-		int boardNo = postdt.getBoardNo();
-		logger.debug("update controller boardNo {}", boardNo);
-
-		Board boarddt = boardService.getBoardInfo(boardNo);
-		String boardNm = boarddt.getBoardNm();
-		
-		List<AFile> afList = afileService.getAttachedFile(postNo);
-		
-		request.setAttribute("postNo", postNo);
-		request.setAttribute("postdt", postdt);
-		request.setAttribute("boardNo", boardNo);
-		request.setAttribute("boardNm", boardNm);
-		request.setAttribute("afList", afList);
-		request.setAttribute("stBoardList", stBoardList);
-
-		
-		request.getRequestDispatcher("post/postUpdate.jsp").forward(request, response);
-		
-	}
-	
-	
-	//수정
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		   
@@ -88,30 +55,41 @@ public class PostUpdateController extends HttpServlet {
 		logger.debug(" detail.doPost -> boardNO {}", request.getParameter("boardNo"));
 		
 		String boardNumber = request.getParameter("boardNo");
-		if (boardNumber == null) {
-			boardNumber = "0";
-		}
-		int boardNo = Integer.parseInt(boardNumber);
+		int boardNo = boardNumber == null ? 0 : Integer.parseInt(boardNumber);
 		
 		User user = (User) request.getSession().getAttribute("S_USERVO");
 		String userId = user.getUserId();
+		
 		if(userId == null || userId.length() == 0) userId = "brown";
 		
 		String postTitle = request.getParameter("postTitle");
-		int postNo = Integer.parseInt(request.getParameter("postNo"));
 		
-		
-		
+		String parenNo = request.getParameter("parentNo");
+		int parentNo = parenNo == null ? 0 : Integer.parseInt(parenNo);
+
 		
 		Post post = new Post();
 
-		post.setPostTitle(postTitle);
-		post.setPostContent(smarteditor);
-		post.setPostNo(postNo);
+		if(parentNo == 0) {		//일반 게시글 작성시
+			post.setBoardNo(boardNo);
+			post.setUserId(userId);
+			post.setPostTitle(postTitle);
+			post.setPostContent(smarteditor);
+			logger.debug("post.일반작성 {}{}{}{}", post.getBoardNo(), post.getUserId(), post.getPostTitle(), post.getPostContent());
+		}else {
+			post.setBoardNo(boardNo);
+			post.setParent_postNo(parentNo);
+			post.setUserId(userId);
+			post.setPostTitle(postTitle);
+			post.setPostContent(smarteditor);
+			logger.debug("post.insert doget 답글 {}{}{}{}{}", post.getBoardNo(), post.getUserId(), post.getPostTitle(), post.getPostContent(), post.getParent_postNo());
+		}
 		
-		postService.updatePost(post);
+		int insertCnt = postService.insertPost(post);
+		logger.debug("insertCnt  =>{} ", insertCnt);
 		
-		logger.debug("postNo updatePost = > {} ", postNo);
+		int postNo = postService.postSeq();
+		logger.debug("postNo insertPost = > {} ", postNo);
 		
 //		try {
 			//사용자가 파일을 업로드 한 경우
@@ -142,11 +120,12 @@ public class PostUpdateController extends HttpServlet {
 					}
 				}
 			}
-			response.sendRedirect(request.getContextPath() + "/postList?boardNo=" + boardNo);
+			response.sendRedirect(request.getContextPath() + "/postList?boardNo=" + post.getBoardNo());
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //			request.getRequestDispatcher("/main.jsp").forward(request, response);
 //		} // catch
+		
 		
 	}
 

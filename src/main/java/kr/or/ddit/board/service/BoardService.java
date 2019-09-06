@@ -57,4 +57,13 @@ public class BoardService implements IBoardService{
 		return updateCnt;
 	}
 
+	@Override
+	public Board getBoardInfo(int boardNo) {
+		SqlSession sqlSession = MybatisUtil.getSession();
+		Board boardInfo = boardDao.getBoardInfo(sqlSession, boardNo);
+		sqlSession.close();
+		
+		return boardInfo;
+	}
+
 }

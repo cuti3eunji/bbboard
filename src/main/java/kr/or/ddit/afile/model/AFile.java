@@ -1,4 +1,4 @@
-package kr.or.ddit.post.model;
+package kr.or.ddit.afile.model;
 
 public class AFile {
 	private int fileNo;

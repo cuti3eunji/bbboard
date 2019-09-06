@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
-import kr.or.ddit.post.model.AFile;
+import kr.or.ddit.afile.model.AFile;
 import kr.or.ddit.post.model.Post;
 
 public class PostDao implements IPostDao {
@@ -34,8 +34,8 @@ public class PostDao implements IPostDao {
 	* Method 설명 :
 	*/
 	@Override
-	public int getPostTotalCnt(SqlSession sqlSession) {
-		return sqlSession.selectOne("post.getPostTotalCnt");
+	public int getPostTotalCnt(SqlSession sqlSession, int boardNo) {
+		return sqlSession.selectOne("post.getPostTotalCnt", boardNo);
 	}
 	
 	/**
@@ -51,19 +51,7 @@ public class PostDao implements IPostDao {
 		return sqlSession.selectOne("post.getPostDetail", postNo);
 	}
 	
-	/**
-	* Method : getAttachedFile
-	* 작성자 : 박은지
-	* 변경이력 :
-	* @param sqlSession
-	* @param postNo
-	* @return
-	* Method 설명 : 첨부파일
-	*/
-	@Override
-	public List<AFile> getAttachedFile(SqlSession sqlSession, int postNo) {
-		return sqlSession.selectList("post.getAttachedFile", postNo);
-	}
+	
 
 	
 	/**
@@ -106,6 +94,16 @@ public class PostDao implements IPostDao {
 	@Override
 	public int deletePost(SqlSession sqlSession, int postNo) {
 		return sqlSession.update("post.deletePost", postNo);
+	}
+
+	@Override
+	public List<String> getMyPost(SqlSession sqlSession, String userId) {
+		return sqlSession.selectList("post.getMyPost", userId);
+	}
+
+	@Override
+	public int postSeq(SqlSession sqlSession) {
+		return sqlSession.selectOne("post.postSeq");
 	}
 
 

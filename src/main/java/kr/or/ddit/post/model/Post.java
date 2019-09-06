@@ -14,9 +14,30 @@ public class Post {
 	private int postStatus;		//게시글 삭제 여부
 	private int level;	//레벨~
 	
+	
+	//일반 글작성
+	public Post(int boardNo, int parent_postNo, String userId, String postTitle, String postContent) {
+		super();
+		this.boardNo = boardNo;
+		this.parent_postNo = parent_postNo;
+		this.userId = userId;
+		this.postTitle = postTitle;
+		this.postContent = postContent;
+	}
+
+	
+	
+	
+	public Post() {
+	}
+
+
+
+
 	public int getLevel() {
 		return level;
 	}
+
 
 	public void setLevel(int level) {
 		this.level = level;

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="comment">
+	
+	<!-- 게시글에 따른 댓글 리스트  -->
+	<select id="getCmtList" parameterType="Integer" resultType="comment">
+		select * from zzz_comment where postNo = #{postNo}
+	</select>
+	
+	
+	<!-- 댓글 작성 -->
+	<insert id="insertCmt" parameterType="comment">
+	insert into zzz_comment (commentNo, commentContent, commentDate, postNo, userId, commentStatus)
+			values(zzzcomment_seq.nextval, #{commentContent}, sysdate, #{postNo}, #{userId}, 1)
+	</insert>
+	
+	
+	<!-- 본인 댓글인지 확인 -->
+	<select id="getMyCmt" parameterType="Integer" resultType="String">
+		select userId from zzz_comment where commentNo = #{commentNo}	
+	</select>
+	
+	<!-- 댓글 삭제 ==> 삭제여부 바꾸기  -->
+	<update id="deleteCmt" parameterType="int">
+		update zzz_comment set
+			commentStatus = 0
+		where commentNo = #{commentNo}
+	</update>
+	
+	
+</mapper>

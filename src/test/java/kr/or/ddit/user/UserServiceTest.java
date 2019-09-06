@@ -27,7 +27,7 @@ public class UserServiceTest {
 
 	/**
 	* Method : getUserListTest
-	* 작성자 : Jo Min-Soo
+	* 작성자 : 
 	* 변경이력 :
 	* Method 설명 : getUserList 테스트
 	*/
@@ -44,7 +44,7 @@ public class UserServiceTest {
 
 	/**
 	* Method : getUserListOnlyHalfTest
-	* 작성자 : Jo Min-Soo
+	* 작성자 :
 	* 변경이력 :
 	* Method 설명 : getUserListOnlyHalf 테스트
 	*/
@@ -61,7 +61,7 @@ public class UserServiceTest {
 
 	/**
 	* Method : getUserTest
-	* 작성자 : Jo Min-Soo
+	* 작성자 : 
 	* 변경이력 :
 	* Method 설명 : 사용자 정보 조회 테스트
 	*/
@@ -80,7 +80,7 @@ public class UserServiceTest {
 	
 	/**
 	* Method : getUserPagingListTest
-	* 작성자 : PC-05
+	* 작성자 :
 	* 변경이력 :
 	* Method 설명 :사용자 페이징 리스트 조회 테스트
 	*/

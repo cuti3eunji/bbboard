@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="afile">
+	
+	<!-- 게시글 상세 - 첨부파일 -->
+	<select id="getAttachedFile" parameterType="Integer" resultType="afile">
+		select *
+		  from zzz_file
+		 where postNo = #{postNo}
+	</select>
+	
+	<select id="selectFile" parameterType="Integer" resultType="afile">
+		select * from zzz_file where fileNo = #{fileNo}
+	</select>
+	
+	<!-- 게시글 작성 - 첨부파일 -->
+	<insert id="insertFile" parameterType="afile">
+		insert into zzz_file(fileNo, filename, realfilename, postNo)
+			values (zzzfile_seq.nextval, #{filename}, #{realfilename}, #{postNo})
+	</insert>
+	
+	<!-- 게시글 수정 첨부파일 -->
+	<update id="updateFile" parameterType="afile">
+		update zzz_file set
+			filename = #{filename},
+			realfilename = #{realfilename}
+		where postNo = #{postNo}
+	</update>
+	
+	<!-- 수정시 첨부파일 삭제 -->
+	<delete id="deleteFile" parameterType="Integer">
+		delete from zzz_file where fileNo = #{fileNo} 
+	</delete>
+	
+</mapper>

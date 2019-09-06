@@ -51,5 +51,5 @@ public interface IBoardDao {
 	*/
 	public int updateBoard(SqlSession sqlSession, Board board);
 
-	
+	public Board getBoardInfo(SqlSession sqlSession, int boardNo);
 }

@@ -8,16 +8,16 @@ import kr.or.ddit.board.service.IBoardService;
 
 public class BoardStatusList {
 	
-	private static List<Board> boardList;
 	private static IBoardService boardService;
 	
 	static {
 		boardService = new BoardService();
-		boardList = boardService.getBoardStatusList(1);
 	}
 	
-	
 	public static List<Board> stBoardList() {
+		List<Board> boardList = boardService.getBoardStatusList(1);
 		return boardList;
 	}
 }
+
+	

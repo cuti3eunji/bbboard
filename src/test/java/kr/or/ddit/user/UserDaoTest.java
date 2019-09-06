@@ -48,7 +48,7 @@ public class UserDaoTest {
 	}
 	/**
 	* Method : getUserListTest
-	* 작성자 : Jo Min-Soo
+	* 작성자 : 
 	* 변경이력 :
 	* Method 설명 : getUserList 테스트
 	*/
@@ -66,7 +66,7 @@ public class UserDaoTest {
 
 	/**
 	* Method : getUserTest
-	* 작성자 : Jo Min-Soo
+	* 작성자 : 
 	* 변경이력 :
 	* Method 설명 : 사용자 정보 조회 테스트
 	*/
@@ -86,7 +86,7 @@ public class UserDaoTest {
 	
 	/**
 	* Method : getUserListOnlyHalf
-	* 작성자 : PC-05
+	* 작성자 : 
 	* 변경이력 :
 	* Method 설명 : 멤버 50개의 데이터만 조회 테스트~~~~
 	*/
@@ -102,7 +102,7 @@ public class UserDaoTest {
 	
 	/**
 	* Method : getUserPagingListTest
-	* 작성자 : PC-05
+	* 작성자 : 
 	* 변경이력 :
 	* Method 설명 :사용자 페이징 리스트 조회 테스트
 	*/
@@ -121,7 +121,7 @@ public class UserDaoTest {
 	
 	/**
 	* Method : getUserTotalCnt
-	* 작성자 : PC-05
+	* 작성자 : 
 	* 변경이력 :
 	* @param sqlSession
 	* @return
@@ -140,7 +140,7 @@ public class UserDaoTest {
 	
 	/**
 	* Method : insertUserTest
-	* 작성자 : PC-05
+	* 작성자 : 
 	* 변경이력 :
 	* Method 설명 : 사용자 등록 테스트
 	 * @throws ParseException 

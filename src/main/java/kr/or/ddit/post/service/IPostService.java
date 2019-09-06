@@ -3,7 +3,6 @@ package kr.or.ddit.post.service;
 import java.util.List;
 import java.util.Map;
 
-import kr.or.ddit.post.model.AFile;
 import kr.or.ddit.post.model.Post;
 
 public interface IPostService {
@@ -19,6 +18,16 @@ public interface IPostService {
 //	public Map<String, Object> getPostPagingList(Map map);
 
 	public List<Post> getPostPagingList(Map map);
+	
+	/**
+	* Method : getPostTotalCnt
+	* 작성자 : 박은지
+	* 변경이력 :
+	* @param sqlSession
+	* @return
+	* Method 설명 :
+	*/
+	public int getPostTotalCnt(int boardNo);
 	
 	
 	/**
@@ -42,6 +51,16 @@ public interface IPostService {
 	* Method 설명 : 게시글 작성
 	*/
 	public int insertPost(Post post);
+	
+	/**
+	* Method : postSeq
+	* 작성자 : 박은지
+	* 변경이력 :
+	* @param sqlSession
+	* @return
+	* Method 설명 : 현재 시퀀스 
+	*/
+	public int postSeq();
 
 	
 	/**
@@ -67,6 +86,8 @@ public interface IPostService {
 	*/
 	public int deletePost(int postNo);
 	
-	public List<AFile> getAttachedFile(int postNo);
+	
+	public List<String> getMyPost(String userId);
+
 	
 }

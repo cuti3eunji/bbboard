@@ -11,7 +11,8 @@
 		<typeAlias alias="page" type="kr.or.ddit.common.model.Page" />
 		<typeAlias alias="board" type="kr.or.ddit.board.model.Board" />
 		<typeAlias alias="post" type="kr.or.ddit.post.model.Post" />
-		<typeAlias alias="afile" type="kr.or.ddit.post.model.AFile" />
+		<typeAlias alias="afile" type="kr.or.ddit.afile.model.AFile" />
+		<typeAlias alias="comment" type="kr.or.ddit.comment.model.Comment" />
 	</typeAliases>
 		
 	<environments default="development">
@@ -29,6 +30,8 @@
 		<mapper resource="kr/or/ddit/config/mybatis/mapper/user.xml" />
 		<mapper resource="kr/or/ddit/config/mybatis/mapper/board.xml" />
 		<mapper resource="kr/or/ddit/config/mybatis/mapper/post.xml" />
+		<mapper resource="kr/or/ddit/config/mybatis/mapper/afile.xml" />
+		<mapper resource="kr/or/ddit/config/mybatis/mapper/comment.xml" />
 	</mappers>
 </configuration>
 

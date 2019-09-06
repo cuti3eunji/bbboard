@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import kr.or.ddit.afile.model.AFile;
 import kr.or.ddit.post.dao.IPostDao;
 import kr.or.ddit.post.dao.PostDao;
-import kr.or.ddit.post.model.AFile;
 import kr.or.ddit.post.model.Post;
 import kr.or.ddit.util.MybatisUtil;
 
@@ -36,15 +36,6 @@ public class PostService implements IPostService {
 		return post;
 	}
 	
-	@Override
-	public List<AFile> getAttachedFile(int postNo) {
-		SqlSession sqlSession = MybatisUtil.getSession();
-		List<AFile> list = postDao.getAttachedFile(sqlSession, postNo);
-		sqlSession.close();
-		
-		return list;
-	}
-
 	@Override
 	public int insertPost(Post post) {
 		SqlSession sqlSession = MybatisUtil.getSession();
@@ -76,6 +67,32 @@ public class PostService implements IPostService {
 		sqlSession.close();
 		
 		return deleteCnt;
+	}
+
+	@Override
+	public List<String> getMyPost(String userId) {
+		SqlSession sqlSession = MybatisUtil.getSession();
+		List<String> postNoList = postDao.getMyPost(sqlSession, userId);
+		sqlSession.close();
+		
+		return postNoList;
+	}
+
+	@Override
+	public int getPostTotalCnt(int boardNo) {
+		SqlSession sqlSession = MybatisUtil.getSession();
+		int totalCnt = postDao.getPostTotalCnt(sqlSession, boardNo);
+		sqlSession.close();
+		
+		return totalCnt;
+	}
+
+	@Override
+	public int postSeq() {
+		SqlSession sqlSession = MybatisUtil.getSession();
+		int postNo = postDao.postSeq(sqlSession);
+		
+		return postNo;
 	}
 
 

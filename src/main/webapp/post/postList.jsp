@@ -53,20 +53,16 @@
 			
 			$("#frm").submit();
 		});
-		
-		$("#writePostBtn").on("click",function(){
-						
-		});
-		
 	});
 </script>
 </head>
 
 <body>
 	<!-- 개발자 입장에서 데이터를 전송하기 위하여 사용하는 form -->
-	<form id="frm" action="${cp }/postDetail" method="get">
+	<form id="frm" action="${cp }/postDetail" method="post">
 		<input type="hidden" id="postNo" name="postNo"/>
 		<input type="hidden" id="boardNm" name="boardNm" value="${boardNm }"/>
+		<input type="hidden" id="boardNo" name="boardNo" value="${boardNo }"/>
 	</form>
 	<!-- header -->
 	<%@ include file="/commonJsp/header.jsp" %>
@@ -133,52 +129,74 @@
 								</c:forEach>
 							</table>
 						</div>
-
-						<a class="btn btn-default pull-right" id="writePostBtn" href="${cp }/writePost">새글 등록</a>
+						
+						<a class="btn btn-default pull-right" id="writePostBtn" href="${cp }/writePost?boardNo=${boardNo }&boardNm=${boardNm}">새글 등록</a>
 
 						<div class="text-center">
 							<ul class="pagination">
 								<c:choose>
-									<c:when test="${pageVo.page == 1 }">
-										<li class="disabled">
-											<span aria-hidden="true">&laquo;</span>
-										</li>
+									<c:when test="${page == 1 }">
+										<li class="disabled"><span aria-label="Previous">&laquo;</span>
+									</c:when>
+									<c:otherwise>
+										<li><a href="${cp }/postList?page=1&boardNo=${boardNo}"
+											aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+										</a>
+									</c:otherwise>
+								</c:choose>
+								</li>
+
+								<c:choose>
+									<c:when test="${page == 1 }">
+										<li class="disabled"><span aria-label="Previous">&lt;</span>
+									</c:when>
+									<c:otherwise>
+										<li><a
+											href="${cp }/postList?page=${page-1}&boardNo=${boardNo}"
+											aria-label="Previous"> <span aria-hidden="true">&lt;</span>
+										</a>
+									</c:otherwise>
+								</c:choose>
+								</li>
+
+								<c:forEach begin="1" end="${paginationSize }" var="i">
+									<c:choose>
+										<c:when test="${i == page }">
+											<li class=active><span>${i }</span></li>
+										</c:when>
+										<c:otherwise>
+											<li><a
+												href="${cp }/postList?page=${i }&boardNo=${boardNo}">${i }</a></li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+
+								<c:choose>
+									<c:when test="${page == paginationSize || paginationSize == 0}">
+										<li class="disabled"><span aria-label="Previous">&gt;</span>
 									</c:when>
 									<c:otherwise>
 										<li>
-											<a href="${cp }/postList?page=${pageVo.page - 1}" aria-label="Previous">
-												<span aria-hidden="true">&laquo;</span>
+											<a href="${cp }/postList?page=${page+1}&boardNo=${boardNo}" aria-label="Next">
+												<span aria-hidden="true">&gt;</span>
 											</a>
 										</li>
 									</c:otherwise>
 								</c:choose>
-								
-								<c:forEach begin="1" end="${paginationSize }" var="idx">
-									<c:choose>
-										<c:when test="${idx == pageVo.page }">
-											<li class="active"><span>${idx }</span></li>
-											 
-										</c:when>
-										<c:otherwise>
-											<li><a href="${cp }/postList?page=${idx }">${idx }</a></li>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
-								
+
 								<c:choose>
-									<c:when test="${pageVo.page == paginationSize }">
-										<li class="disabled">
-											<span aria-hidden="true">&raquo;</span>
-										</li>
+									<c:when test="${page == paginationSize || paginationSize == 0}">
+										<li class="disabled"><span aria-label="Previous">&raquo;</span>
 									</c:when>
 									<c:otherwise>
 										<li>
-											<a href="${cp }/postList?page=${pageVo.page + 1}" aria-label="Previous">
+											<a href="${cp }/postList?page=${paginationSize }&boardNo=${boardNo}" aria-label="Previous">
 												<span aria-hidden="true">&raquo;</span>
 											</a>
 										</li>
 									</c:otherwise>
 								</c:choose>
+
 							</ul>
 						</div>
 					</div>

@@ -43,5 +43,7 @@ public interface IBoardService {
 	* Method 설명 : 게시판 수정
 	*/
 	public int updateBoard(Board board);
+	
+	public Board getBoardInfo(int boardNo);
 
 }

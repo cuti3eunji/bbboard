@@ -18,11 +18,11 @@
 		 	   from (select postNo, parent_postNo, postTitle, postDate, userId, level, postStatus
   					   from (select *
 		 			   		   from zzz_post
-					  		  where boardNo = #{boardNo} order by postNo desc) a
+					  		  where boardNo = #{BOARDNO} order by postNo desc) a
 					  start with parent_postNo is null
  					  connect by prior postNo = parent_postNo
-					  order siblings by groupNo desc, postNO) a )
-			  where rn between (#{page}-1)*#{pagesize} + 1 and #{page}*#{pagesize}
+					  order siblings by groupNo desc, postNO desc) a )
+			  where rn between (#{PAGE}-1)*#{PAGESIZE} + 1 and #{PAGE}*#{PAGESIZE}
 	</select>
 	
 	<select id="getPostTotalCnt" parameterType="Integer" resultType="Integer">
@@ -37,29 +37,32 @@
 		  from zzz_post
 		 where postNo = #{postNo}
 	</select>
-	
-	<!-- 게시글 상세 - 첨부파일 -->
-	<select id="getAttachedFile" parameterType="Integer" resultType="afile">
-		select *
-		  from zzz_file
-		 where postNo = #{postNo}
-	</select>
-	
-	<!-- 게시글 작성 // postNo시퀀스  -->
+
+	<!-- 게시글 작성 // postNo시퀀스 일반작성시 parentNo에 0넣기 -->
 	<insert id="insertPost" parameterType="post">
 		insert into zzz_post (postNo, boardNo, parent_postNo, postTitle, postContent, userId, postDate, postStatus, groupNo)
 			values(zzzpost_seq.nextval, #{boardNo}, 
 			
 			case when #{parent_postNo,jdbcType=NUMERIC} = 0 then null
-				 else #{parent_postNo,jdbcType=NUMERIC}
+				 else #{parent_postNo,jdbcType=NUMERIC} end,
 			
 			#{postTitle}, #{postContent}, #{userId}, sysdate, 1,
 			
 			case when #{parent_postNo,jdbcType=NUMERIC} = 0 then zzzpost_seq.currval
-				 else #{parent_postNo,jdbcType=NUMERIC}
+				 else #{parent_postNo,jdbcType=NUMERIC} end
 			)
 	</insert>
 	
+	<!-- 현재 시퀀스 받아오기 -->
+	<select id="postSeq" resultType="Integer">
+		select zzzpost_seq.currval from dual
+	</select>
+	
+
+	<!-- 본인 게시글인지 확인 -->
+	<select id="getMyPost" parameterType="String" resultType="String">
+		select postNo from zzz_post where userid = #{userId}	
+	</select>
 	
 	<!-- 게시글 수정 -->
 	<update id="updatePost" parameterType="post">
@@ -68,15 +71,6 @@
 			postContent = #{postContent}
 		where postNo = #{postNo}
 	</update>
-	
-	<!-- 게시글 수정 첨부파일 -->
-	<update id="updateFile" parameterType="afile">
-		update zzz_file set
-			filename = #{filename},
-			realfilename = #{realfilename}
-		where postNo = #{postNo}
-	</update>
-	
 	
 	<!-- 게시글 삭제 ==> 삭제여부 바꾸기  -->
 	<update id="deletePost" parameterType="int">

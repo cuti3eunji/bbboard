@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
-import kr.or.ddit.post.model.AFile;
+import kr.or.ddit.afile.model.AFile;
 import kr.or.ddit.post.model.Post;
 
 public interface IPostDao {
@@ -28,7 +28,7 @@ public interface IPostDao {
 	* @return
 	* Method 설명 :
 	*/
-	public int getPostTotalCnt(SqlSession sqlSession);
+	public int getPostTotalCnt(SqlSession sqlSession, int boardNo);
 	
 	
 	/**
@@ -41,17 +41,6 @@ public interface IPostDao {
 	*/
 	public Post getPostDetail(SqlSession sqlSession, int postNo); 
 	
-	/**
-	* Method : getAttachedFile
-	* 작성자 : 박은지
-	* 변경이력 :
-	* @param sqlSession
-	* @param postNo
-	* @return
-	* Method 설명 : 첨부파일 출력
-	*/
-	public List<AFile> getAttachedFile(SqlSession sqlSession, int postNo);
-	
 	
 	/**
 	* Method : insertPost
@@ -63,6 +52,16 @@ public interface IPostDao {
 	* Method 설명 : 게시글 작성
 	*/
 	public int insertPost(SqlSession sqlSession, Post post);
+	
+	/**
+	* Method : postSeq
+	* 작성자 : 박은지
+	* 변경이력 :
+	* @param sqlSession
+	* @return
+	* Method 설명 : 현재 시퀀스 
+	*/
+	public int postSeq(SqlSession sqlSession);
 
 	
 	/**
@@ -90,12 +89,13 @@ public interface IPostDao {
 	
 	
 	/**
-	* Method : boardNoPostInfo
+	* Method : getMyPost
 	* 작성자 : 박은지
 	* 변경이력 :
 	* @param sqlSession
-	* @param boardNo
+	* @param userId
 	* @return
-	* Method 설명 : boardNo에 따른 게시글의 전체정보
+	* Method 설명 : 본인 게시글인지 확인
 	*/
+	public List<String> getMyPost(SqlSession sqlSession, String userId);
 }
